@@ -24,6 +24,7 @@ class ExchangerController extends AbstractController
 
     public function conversions(int $id, string $action)
     {
+        var_dump($this->container->has('serializer'));
         $result = [$id, $action];
 
         return $this->json($result);
