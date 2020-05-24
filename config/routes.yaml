@@ -1,15 +1,35 @@
-index:
-  path: /
-  controller: App\Controller\ExchangerController::index
-
 token:
   path: /token
-  controller: App\Controller\ExchangerController::token
+  controller: App\Controller\TokenController::token
   condition:  "context.getMethod() in ['POST']"
 
 conversions:
-  path: /conversions/{id}/{action}
-  controller: App\Controller\ExchangerController::conversions
-  condition:  "context.getMethod() in ['GET', 'POST']"
+  path: /conversions
+  controller: App\Controller\ConversionController::conversions
+  condition:  "context.getMethod() in ['GET']"
+
+conversion-info:
+  path: /conversion/{id}
+  controller: App\Controller\ConversionController::conversion
+  condition:  "context.getMethod() in ['GET']"
   requirements:
     id: '\d+'
+
+conversion-execute:
+  path: /conversion/{id}
+  controller: App\Controller\ConversionController::executeConversion
+  condition:  "context.getMethod() in ['POST']"
+  requirements:
+    id: '\d+'
+
+conversion-prepare:
+  path: /conversion/{id}
+  controller: App\Controller\ConversionController::prepareConversion
+  condition:  "context.getMethod() in ['POST']"
+  requirements:
+    id: '\d+'
+
+bank:
+  path: /bank
+  controller: App\Controller\BankController::bank
+  condition:  "context.getMethod() in ['GET']"
