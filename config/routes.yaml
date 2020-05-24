@@ -8,7 +8,7 @@ token:
   condition:  "context.getMethod() in ['POST']"
 
 conversions:
-  path: /conversions/{id}
+  path: /conversions/{id}/{action}
   controller: App\Controller\ExchangerController::conversions
   condition:  "context.getMethod() in ['GET', 'POST']"
   requirements:
