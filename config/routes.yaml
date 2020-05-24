@@ -1,7 +1,11 @@
 index:
-    path: /
-    controller: App\Controller\ExchangerController::index
+  path: /
+  controller: App\Controller\ExchangerController::index
 
 token:
   path: /token
   controller: App\Controller\ExchangerController::token
+
+conversions:
+  path: /conversions/{id}/{action}
+  controller: App\Controller\ExchangerController::conversions

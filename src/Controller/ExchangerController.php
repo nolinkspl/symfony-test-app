@@ -18,4 +18,9 @@ class ExchangerController extends AbstractController
 
         return $this->json($result);
     }
+
+    public function conversions(int $id, string $action)
+    {
+        return $this->json([$id, $action]);
+    }
 }
