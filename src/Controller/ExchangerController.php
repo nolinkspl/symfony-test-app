@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ExchangerController extends AbstractController
 {
@@ -22,10 +23,14 @@ class ExchangerController extends AbstractController
         return $this->json($result);
     }
 
-    public function conversions(int $id, string $action)
+    public function conversions(int $id, string $action = '')
     {
-        var_dump($this->container->has('serializer'));
         $result = [$id, $action];
+
+        var_dump($this->container->get('serializer')->serialize($result, 'json', array_merge([
+            'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
+        ], [])));
+
 
         return $this->json($result);
     }
