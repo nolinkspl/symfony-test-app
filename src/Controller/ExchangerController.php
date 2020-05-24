@@ -17,5 +17,8 @@ class ExchangerController extends AbstractController
     public function token()
     {
         var_dump('test2');
+        $result = [1,2,3];
+
+        return json_encode($result);
     }
 }
