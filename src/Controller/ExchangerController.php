@@ -11,7 +11,7 @@ class ExchangerController extends AbstractController
     {
         var_dump('test1');
 
-        return $this->render('index');
+        return $this->render('base.html.twig');
     }
 
     public function token()
