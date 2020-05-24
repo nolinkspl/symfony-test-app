@@ -25,7 +25,10 @@ class ExchangerController extends AbstractController
 
     public function conversions(int $id, string $action = '')
     {
-        $result = [$id, $action];
+        $result = [
+            'id'     => $id,
+            'action' => $action,
+        ];
 
         var_dump($this->container->get('serializer')->serialize($result, 'json', array_merge([
             'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
