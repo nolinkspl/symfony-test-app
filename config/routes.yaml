@@ -5,7 +5,9 @@ index:
 token:
   path: /token
   controller: App\Controller\ExchangerController::token
+  condition:  "context.getMethod() in ['POST']"
 
 conversions:
   path: /conversions/{id}/{action}
   controller: App\Controller\ExchangerController::conversions
+  condition:  "context.getMethod() in ['GET', 'POST']"

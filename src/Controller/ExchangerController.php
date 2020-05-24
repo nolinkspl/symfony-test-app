@@ -14,7 +14,10 @@ class ExchangerController extends AbstractController
 
     public function token()
     {
-        $result = [1,2,3];
+        $result = [
+            'token'    => 'foo',
+            'expireAt' => (new \DateTime('+1 hour'))->format('Y-m-d H:i:s'),
+        ];
 
         return $this->json($result);
     }
