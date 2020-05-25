@@ -40,8 +40,13 @@ class ConversionController extends DefaultController
 
     public function prepareConversion(int $id, Request $request): JsonResponse
     {
+        $data = [];
+        if (strpos($request->headers->get('Content-Type'), 'application/json') === 0) {
+            $data = json_decode($request->getContent(), true);
+            $request->request->replace(is_array($data) ? $data : array());
+        }
         $conversion = $this->findConversionById($id);
-        var_dump($request->getContent());
+        var_dump($data);
 
         return $this->json(['foo' => 'bar']);
     }
