@@ -51,6 +51,13 @@ class Amount
         return $this;
     }
 
+    public function setCurrency(Currency $currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
     public function getAmount(): ?int
     {
         return $this->amount;

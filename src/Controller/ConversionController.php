@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Amount;
 use App\Entity\Conversion;
+use App\Entity\Currency;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -28,7 +30,8 @@ class ConversionController extends DefaultController
 
     public function conversion(int $id): JsonResponse
     {
-        return $this->json($this->getConversionById($id)->info());
+        $conversion = $this->getConversionById($id);
+        return $this->json(array_merge(['isExecuted' => $conversion->getIsExecuted()], $conversion->info()));
     }
 
     public function executeConversion(int $id): JsonResponse
@@ -47,7 +50,7 @@ class ConversionController extends DefaultController
             $data = json_decode($request->getContent(), true);
             $request->request->replace(is_array($data) ? $data : []);
         }
-
+var_dump($data);
         if (empty($data)) {
             throw new BadRequestHttpException();
         }
@@ -56,9 +59,22 @@ class ConversionController extends DefaultController
             throw new HttpException(409, 'Operation with this ID already exists');
         }
 
+        $usdCurrency = $this->getDoctrine()
+                            ->getRepository(Currency::class)
+                            ->findOneBy(['code' => 'USD']);
+        $rubCurrency = $this->getDoctrine()
+                            ->getRepository(Currency::class)
+                            ->findOneBy(['code' => 'RUB']);
 
+        $conversion = new Conversion();
+        $conversion->setExpireAt(new \DateTime('+1 minute'));
+        $conversion->setUid($id);
+        $conversion->setFromAmount((new Amount())->setAmount(125125)->setCurrency($rubCurrency));
+        $conversion->setToAmount((new Amount())->setCurrency($usdCurrency));
 
-        return $this->json(['foo' => 'bar']);
+        $this->storeConversion($conversion);
+
+        return $this->json($conversion->info());
     }
 
     private function getConversionById(int $id): Conversion

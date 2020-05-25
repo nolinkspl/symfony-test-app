@@ -25,7 +25,7 @@ class Conversion
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isExecuted;
+    private $isExecuted = false;
 
     /**
      * @ORM\Column(type="integer")
@@ -128,10 +128,23 @@ class Conversion
         return $this;
     }
 
+    public function setFromAmount(Amount $amount)
+    {
+        $this->fromAmount = $amount;
+
+        return $this;
+    }
+
+    public function setToAmount(Amount $amount)
+    {
+        $this->toAmount = $amount;
+
+        return $this;
+    }
+
     public function info(): array
     {
         return [
-            'isExecuted' => $this->isExecuted,
             'fromAmount' => $this->fromAmount->info(),
             'toAmount'   => $this->toAmount->info(),
             'rate'       => $this->rate,
