@@ -29,7 +29,7 @@ class Amount
 
     /**
      * @var Currency
-     * @ORM\OneToOne(targetEntity="Currency", mappedBy="currency_id"
+     * @ORM\OneToOne(targetEntity="Currency", mappedBy="currency_id")
      */
     private $currency;
 
