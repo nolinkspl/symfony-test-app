@@ -18,11 +18,6 @@ class Conversion
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=40, nullable=true)
-     */
-    private $uid;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $isExecuted = false;
@@ -64,18 +59,6 @@ class Conversion
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUid(): ?string
-    {
-        return $this->uid;
-    }
-
-    public function setUid(?string $uid): self
-    {
-        $this->uid = $uid;
-
-        return $this;
     }
 
     public function getIsExecuted(): ?bool

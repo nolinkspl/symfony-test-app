@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Amount;
 use App\Entity\Conversion;
-use App\Entity\Currency;
-use App\Repository\ConversionRepository;
+use App\Service\ConversionManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -14,28 +12,17 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ConversionController extends DefaultController
 {
 
-    /** @var ConversionRepository */
-    private $conversionRepository;
+    /** @var ConversionManager */
+    private $conversionManager;
 
-    public function __construct(ConversionRepository $conversionRepository)
+    public function __construct(ConversionManager $conversionManager)
     {
-        $this->conversionRepository = $conversionRepository;
-        var_dump($conversionRepository->findOneBy(['id'=>1])->getExpireAt());
+        $this->conversionManager = $conversionManager;
     }
 
     public function conversions(): JsonResponse
     {
-        /** @var Conversion[] $conversions */
-        $conversions = $this->getDoctrine()
-                       ->getRepository(Conversion::class)
-                       ->findAll();
-
-        $result = [];
-        foreach ($conversions as $conversion) {
-            $result[] = $conversion->getUid();
-        }
-
-        return $this->json(['conversions' => $result]);
+        return $this->json(['conversions' => $this->conversionManager->findAllConversionIDs()]);
     }
 
     public function conversion(int $id): JsonResponse
@@ -47,8 +34,7 @@ class ConversionController extends DefaultController
     public function executeConversion(int $id): JsonResponse
     {
         $conversion = $this->getConversionById($id);
-        $conversion->execute();
-        $this->storeConversion($conversion);
+        $this->conversionManager->executeConversion($conversion);
 
         return $this->json('Transaction executed successfully');
     }
@@ -65,53 +51,23 @@ class ConversionController extends DefaultController
             throw new BadRequestHttpException();
         }
 
-        if ($this->findConversionById($id) !== null) {
+        if ($this->conversionManager->findConversionById($id) !== null) {
             throw new HttpException(409, 'Operation with this ID already exists');
         }
 
-        $usdCurrency = $this->getDoctrine()
-                            ->getRepository(Currency::class)
-                            ->findOneBy(['code' => 'USD']);
-        $rubCurrency = $this->getDoctrine()
-                            ->getRepository(Currency::class)
-                            ->findOneBy(['code' => 'RUB']);
-
-
-
-
-        $conversion = new Conversion();
-        $conversion->setExpireAt(new \DateTime('+1 minute'));
-        $conversion->setUid($id);
-        $conversion->setFromAmount((new Amount())->setAmount(125125)->setCurrency($rubCurrency));
-        $conversion->setToAmount((new Amount())->setCurrency($usdCurrency));
-
-        $this->storeConversion($conversion);
+        $conversion = $this->conversionManager->prepareConversion($data);
 
         return $this->json($conversion->info());
     }
 
     private function getConversionById(int $id): Conversion
     {
-        $result = $this->findConversionById($id);
+        $result = $this->conversionManager->findConversionById($id);
 
         if ($result === null) {
             throw $this->createNotFoundException('No conversion found for id ' . $id);
         }
 
         return $result;
-    }
-
-    private function findConversionById(int $id): ?Conversion
-    {
-        return $this->getDoctrine()
-                       ->getRepository(Conversion::class)
-                       ->find($id);
-    }
-
-    private function storeConversion(Conversion $conversion)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($conversion);
-        $entityManager->flush();
     }
 }

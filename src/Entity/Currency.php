@@ -55,4 +55,9 @@ class Currency
 
         return $this;
     }
+
+    public function getEncodedRates(): array
+    {
+        return json_encode($this->getRates(), true);
+    }
 }
