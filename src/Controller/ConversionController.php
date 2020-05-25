@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Amount;
 use App\Entity\Conversion;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -15,6 +16,12 @@ class ConversionController extends DefaultController
 
     public function conversion(int $id):JsonResponse
     {
+        $amount = $this->getDoctrine()
+                       ->getRepository(Amount::class)
+                       ->find($id);
+
+        var_dump($amount);
+
         /** @var Conversion $result */
         $result = $this->getDoctrine()
                        ->getRepository(Conversion::class)
