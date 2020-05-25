@@ -30,7 +30,12 @@ class Conversion
     /**
      * @ORM\Column(type="integer")
      */
-    private $amountId;
+    private $fromAmountId;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $toAmountId;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -45,9 +50,16 @@ class Conversion
     /**
      * @var Amount
      * @ORM\OneToOne(targetEntity="Amount", cascade={"all"})
-     * @ORM\JoinColumn(name="amount_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="from_amount_id", referencedColumnName="id")
      */
-    private $amount;
+    private $fromAmount;
+
+    /**
+     * @var Amount
+     * @ORM\OneToOne(targetEntity="Amount", cascade={"all"})
+     * @ORM\JoinColumn(name="to_amount_id", referencedColumnName="id")
+     */
+    private $toAmount;
 
     public function getId(): ?int
     {
@@ -78,14 +90,16 @@ class Conversion
         return $this;
     }
 
-    public function getAmountId(): ?int
+    public function setFromAmountId(int $amountId): self
     {
-        return $this->amountId;
+        $this->fromAmountId = $amountId;
+
+        return $this;
     }
 
-    public function setAmountId(int $amountId): self
+    public function setToAmountId(int $amountId): self
     {
-        $this->amountId = $amountId;
+        $this->toAmountId = $amountId;
 
         return $this;
     }
@@ -118,37 +132,16 @@ class Conversion
     {
         return [
             'isExecuted' => $this->isExecuted,
-            'fromAmount' => $this->isExecuted ? $this->calculateBeforeExecutedAmount()->info() : $this->amount->info(),
-            'toAmount'   => $this->isExecuted ? $this->amount->info() : $this->calculateAfterExecutedAmount()->info(),
+            'fromAmount' => $this->fromAmount->info(),
+            'toAmount'   => $this->toAmount->info(),
             'rate'       => $this->rate,
             'expireAt'   => $this->expireAt,
         ];
     }
 
-    private function calculateBeforeExecutedAmount(): Amount
-    {
-        $result = clone $this->amount;
-        $result->setAmount($this->amount->getAmount() / $this->getRate());
-
-        return $result;
-    }
-
-    public function calculateAfterExecutedAmount(): Amount
-    {
-        $result = clone $this->amount;
-        $result->setAmount($this->amount->getAmount() * $this->getRate());
-
-        return $result;
-    }
-
-    public function amount(): Amount
-    {
-        return $this->amount;
-    }
-
     public function execute()
     {
-        $this->amount = $this->calculateAfterExecutedAmount();
+        $this->toAmount->setAmount($this->fromAmount->getAmount() * $this->getRate());
         $this->isExecuted = true;
     }
 }

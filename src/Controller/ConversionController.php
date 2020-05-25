@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Conversion;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ConversionController extends DefaultController
 {
@@ -43,10 +44,12 @@ class ConversionController extends DefaultController
         $data = [];
         if (strpos($request->headers->get('Content-Type'), 'application/json') === 0) {
             $data = json_decode($request->getContent(), true);
-            $request->request->replace(is_array($data) ? $data : array());
+            $request->request->replace(is_array($data) ? $data : []);
         }
-        $conversion = $this->findConversionById($id);
-        var_dump($data);
+
+        if (empty($data)) {
+            throw new BadRequestHttpException();
+        }
 
         return $this->json(['foo' => 'bar']);
     }
