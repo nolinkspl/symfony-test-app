@@ -13,21 +13,21 @@ conversion-info:
   controller: App\Controller\ConversionController::conversion
   condition:  "context.getMethod() in ['GET']"
   requirements:
-    id: '\d+', '\d+(|\.\d{2})'
+    id: '\d+(|\.\d{2})'
 
 conversion-execute:
   path: /conversion/{id}/execute
   controller: App\Controller\ConversionController::executeConversion
   condition:  "context.getMethod() in ['POST']"
   requirements:
-    id: '\d+'
+    id: '\d+(|\.\d{2})'
 
 conversion-prepare:
   path: /conversion/{id}/prepare
   controller: App\Controller\ConversionController::prepareConversion
   condition:  "context.getMethod() in ['POST']"
   requirements:
-    id: '\d+'
+    id: '\d+(|\.\d{2})'
 
 bank:
   path: /bank
