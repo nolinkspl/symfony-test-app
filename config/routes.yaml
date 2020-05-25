@@ -13,7 +13,7 @@ conversion-info:
   controller: App\Controller\ConversionController::conversion
   condition:  "context.getMethod() in ['GET']"
   requirements:
-    id: '\d+'
+    id: '\d+', '\d+(|\.\d{2})'
 
 conversion-execute:
   path: /conversion/{id}/execute
