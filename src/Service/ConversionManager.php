@@ -102,7 +102,14 @@ class ConversionManager
         $result->setExpireAt(new \DateTime('+1 minute'));
         $result->setFromAmount($amount);
         $result->setToAmount((new Amount())->setCurrency($toCurrency));
-        $result->setRate($this->propertyAccessor->getValue($fromCurrency->getEncodedRates(), $toCurrency->getCode()));
+
+        $rate = $this->propertyAccessor->getValue($fromCurrency->getEncodedRates(), $toCurrency->getCode());
+
+        if (empty($rate)) {
+            throw new HttpException(406, 'Rate doesnt exists');
+        }
+
+        $result->setRate($rate);
 
         return $result;
     }
