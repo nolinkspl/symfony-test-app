@@ -27,6 +27,19 @@ class Amount
      */
     private $amount;
 
+    /**
+     * @var Currency
+     * @ORM\OneToOne(targetEntity="Currency", mappedBy="currency_id"
+     */
+    private $currency;
+
+    /**
+     * @var Conversion
+     * @ORM\OneToOne(targetEntity="Conversion", inversedBy="amount_id")
+     * @ORM\JoinColumn(name="conversion_id", referencedColumnName="id")
+     */
+    private $conversion;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,5 +67,18 @@ class Amount
         $this->amount = $amount;
 
         return $this;
+    }
+
+    public function info(): array
+    {
+        return [
+            'currency' => $this->currency->getCode(),
+            'amount'   => $this->getAmountAsMoney(),
+        ];
+    }
+
+    private function getAmountAsMoney(): float
+    {
+        return $this->getAmount() / 100;
     }
 }

@@ -42,6 +42,12 @@ class Conversion
      */
     private $expireAt;
 
+    /**
+     * @var Amount
+     * @ORM\OneToOne(targetEntity="Amount", mappedBy="amount_id", cascade={"persist"})
+     */
+    private $amount;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,5 +111,32 @@ class Conversion
         $this->expireAt = $expireAt;
 
         return $this;
+    }
+
+    public function info(): array
+    {
+        return [
+            'isExecuted' => $this->isExecuted,
+            'fromAmount' => $this->isExecuted ? $this->calculateBeforeExecutedAmount()->info() : $this->amount->info(),
+            'toAmount'   => $this->isExecuted ? $this->amount->info() : $this->calculateAfterExecutedAmount()->info(),
+            'rate'       => $this->rate,
+            'expireAt'   => $this->expireAt,
+        ];
+    }
+
+    private function calculateBeforeExecutedAmount(): Amount
+    {
+        $result = clone $this->amount;
+        $result->setAmount($this->amount->getAmount() / $this->getRate());
+
+        return $result;
+    }
+
+    public function calculateAfterExecutedAmount(): Amount
+    {
+        $result = clone $this->amount;
+        $result->setAmount($this->amount->getAmount() * $this->getRate());
+
+        return $result;
     }
 }
