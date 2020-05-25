@@ -2,9 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\TokenRepository;
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ORM\Entity(repositoryClass=TokenRepository::class)
  */
@@ -26,6 +23,12 @@ class Token
      * @ORM\Column(type="datetime")
      */
     private $expiresAt;
+
+    public function __construct(string $uid, \DateTime $expiresAt)
+    {
+        $this->setUid($uid);
+        $this->setExpiresAt($expiresAt);
+    }
 
     public function getId(): ?int
     {
@@ -54,5 +57,13 @@ class Token
         $this->expiresAt = $expiresAt;
 
         return $this;
+    }
+
+    public function info(): array
+    {
+        return [
+            'token'     => $this->getUid(),
+            'expiresAt' => $this->getExpiresAt()->format('Y-m-d h:i:s'),
+        ];
     }
 }

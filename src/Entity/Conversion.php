@@ -2,9 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\ConversionRepository;
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ORM\Entity(repositoryClass=ConversionRepository::class)
  */
@@ -144,5 +141,11 @@ class Conversion
     public function amount(): Amount
     {
         return $this->amount;
+    }
+
+    public function execute()
+    {
+        $this->amount = $this->calculateAfterExecutedAmount();
+        $this->isExecuted = true;
     }
 }

@@ -2,18 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\Token;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TokenController extends DefaultController
 {
 
-    public function token():JsonResponse
+    public function token(): JsonResponse
     {
-        $result = [
-            'token'    => 'foo',
-            'expireAt' => (new \DateTime('+1 hour'))->format('Y-m-d H:i:s'),
-        ];
+        $expireAt = new \DateTime('+1 hour');
+        $tokenUid = hash('sha1', $expireAt);
+        $token = new Token($tokenUid, $expireAt);
 
-        return $this->json($result);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($token);
+        $entityManager->flush();
+
+        return $this->json($token->info());
     }
 }

@@ -2,19 +2,51 @@
 
 namespace App\Controller;
 
-use App\Entity\Amount;
 use App\Entity\Conversion;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class ConversionController extends DefaultController
 {
 
-    public function conversions():JsonResponse
+    public function conversions(): JsonResponse
     {
+        /** @var Conversion[] $conversions */
+        $conversions = $this->getDoctrine()
+                       ->getRepository(Conversion::class)
+                       ->findAll();
+
+        $result = [];
+        foreach ($conversions as $conversion) {
+            $result[] = $conversion->getUid();
+        }
+
+        return $this->json(['conversions' => $result]);
+    }
+
+    public function conversion(int $id): JsonResponse
+    {
+        return $this->json($this->findConversionById($id)->info());
+    }
+
+    public function executeConversion(int $id): JsonResponse
+    {
+        $conversion = $this->findConversionById($id);
+        $conversion->execute();
+        $this->storeConversion($conversion);
+
+        return $this->json('Transaction executed successfully');
+    }
+
+    public function prepareConversion(int $id, Request $request): JsonResponse
+    {
+        $conversion = $this->findConversionById($id);
+        var_dump($request->getContent());
+
         return $this->json(['foo' => 'bar']);
     }
 
-    public function conversion(int $id):JsonResponse
+    private function findConversionById(int $id): Conversion
     {
         /** @var Conversion $result */
         $result = $this->getDoctrine()
@@ -22,21 +54,16 @@ class ConversionController extends DefaultController
                        ->find($id);
 
         if ($result === null) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+            throw $this->createNotFoundException('No conversion found for id ' . $id);
         }
 
-        return $this->json($result->info());
+        return $result;
     }
 
-    public function executeConversion(int $id):JsonResponse
+    private function storeConversion(Conversion $conversion)
     {
-        return $this->json(['foo' => $id]);
-    }
-
-    public function prepareConversion(int $id):JsonResponse
-    {
-        return $this->json(['foo' => $id]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($conversion);
+        $entityManager->flush();
     }
 }
