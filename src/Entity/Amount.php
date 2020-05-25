@@ -29,7 +29,7 @@ class Amount
 
     /**
      * @var Currency
-     * @ORM\OneToOne(targetEntity="Currency")
+     * @ORM\ManyToOne(targetEntity="Currency")
      * @ORM\JoinColumn(name="currency_id", referencedColumnName="id")
      */
     private $currency;
