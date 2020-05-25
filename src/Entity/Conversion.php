@@ -140,4 +140,9 @@ class Conversion
 
         return $result;
     }
+
+    public function amount(): Amount
+    {
+        return $this->amount;
+    }
 }

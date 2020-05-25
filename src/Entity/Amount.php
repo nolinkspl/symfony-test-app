@@ -71,6 +71,11 @@ class Amount
         ];
     }
 
+    public function currency(): Currency
+    {
+        return $this->currency;
+    }
+
     private function getAmountAsMoney(): float
     {
         return $this->getAmount() / 100;

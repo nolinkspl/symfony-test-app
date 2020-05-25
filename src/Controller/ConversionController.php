@@ -16,11 +16,12 @@ class ConversionController extends DefaultController
 
     public function conversion(int $id):JsonResponse
     {
+        /** @var Amount $amount */
         $amount = $this->getDoctrine()
                        ->getRepository(Amount::class)
                        ->find($id);
 
-        var_dump($amount);
+        var_dump($amount->currency()->getId());
 
         /** @var Conversion $result */
         $result = $this->getDoctrine()
@@ -33,7 +34,7 @@ class ConversionController extends DefaultController
             );
         }
 
-        var_dump($result);
+        var_dump($result->amount()->getId());
 
         return $this->json($result->info());
     }
