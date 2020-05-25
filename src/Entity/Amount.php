@@ -29,16 +29,10 @@ class Amount
 
     /**
      * @var Currency
-     * @ORM\OneToOne(targetEntity="Currency", mappedBy="currency_id")
+     * @ORM\OneToOne(targetEntity="Currency")
+     * @ORM\JoinColumn(name="currency_id", referencedColumnName="id")
      */
     private $currency;
-
-    /**
-     * @var Conversion
-     * @ORM\OneToOne(targetEntity="Conversion", inversedBy="amount_id")
-     * @ORM\JoinColumn(name="conversion_id", referencedColumnName="id")
-     */
-    private $conversion;
 
     public function getId(): ?int
     {
