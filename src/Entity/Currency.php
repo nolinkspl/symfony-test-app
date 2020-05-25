@@ -18,7 +18,7 @@ class Currency
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=3)
+     * @ORM\Column(type="string", length=3, unique=true)
      */
     private $code;
 
