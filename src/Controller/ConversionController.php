@@ -26,6 +26,8 @@ class ConversionController extends DefaultController
             );
         }
 
+        var_dump($result);
+
         return $this->json($result->info());
     }
 

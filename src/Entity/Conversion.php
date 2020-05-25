@@ -44,7 +44,7 @@ class Conversion
 
     /**
      * @var Amount
-     * @ORM\OneToOne(targetEntity="Amount", mappedBy="amount_id", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Amount", mappedBy="amount_id", cascade={"all"})
      */
     private $amount;
 
