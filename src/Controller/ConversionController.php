@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Amount;
 use App\Entity\Conversion;
 use App\Entity\Currency;
+use App\Repository\ConversionRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -12,6 +13,15 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ConversionController extends DefaultController
 {
+
+    /** @var ConversionRepository */
+    private $conversionRepository;
+
+    public function __construct(ConversionRepository $conversionRepository)
+    {
+        $this->conversionRepository = $conversionRepository;
+        var_dump($conversionRepository->findOneBy(['id'=>1])->getExpireAt());
+    }
 
     public function conversions(): JsonResponse
     {
@@ -50,7 +60,7 @@ class ConversionController extends DefaultController
             $data = json_decode($request->getContent(), true);
             $request->request->replace(is_array($data) ? $data : []);
         }
-var_dump($data);
+
         if (empty($data)) {
             throw new BadRequestHttpException();
         }
@@ -65,6 +75,9 @@ var_dump($data);
         $rubCurrency = $this->getDoctrine()
                             ->getRepository(Currency::class)
                             ->findOneBy(['code' => 'RUB']);
+
+
+
 
         $conversion = new Conversion();
         $conversion->setExpireAt(new \DateTime('+1 minute'));
