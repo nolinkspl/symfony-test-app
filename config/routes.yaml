@@ -16,14 +16,14 @@ conversion-info:
     id: '\d+'
 
 conversion-execute:
-  path: /conversion/{id}
+  path: /conversion/{id}/execute
   controller: App\Controller\ConversionController::executeConversion
   condition:  "context.getMethod() in ['POST']"
   requirements:
     id: '\d+'
 
 conversion-prepare:
-  path: /conversion/{id}
+  path: /conversion/{id}/prepare
   controller: App\Controller\ConversionController::prepareConversion
   condition:  "context.getMethod() in ['POST']"
   requirements:
