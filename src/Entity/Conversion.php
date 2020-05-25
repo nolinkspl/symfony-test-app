@@ -38,7 +38,7 @@ class Conversion
     private $rate;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $expireAt;
 
@@ -104,7 +104,7 @@ class Conversion
         return $this->expireAt;
     }
 
-    public function setExpireAt(\DateTimeInterface $expireAt): self
+    public function setExpireAt(\DateTimeInterface $expireAt = null): self
     {
         $this->expireAt = $expireAt;
 
@@ -138,6 +138,7 @@ class Conversion
     public function execute()
     {
         $this->toAmount->setAmount(floor($this->fromAmount->getAmount() * $this->getRate()));
+        $this->setExpireAt(null);
         $this->isExecuted = true;
     }
 }
