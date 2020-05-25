@@ -141,7 +141,7 @@ class Conversion
 
     public function execute()
     {
-        $this->toAmount->setAmount($this->fromAmount->getAmount() * $this->getRate());
+        $this->toAmount->setAmount(floor($this->fromAmount->getAmount() * $this->getRate()));
         $this->isExecuted = true;
     }
 }
