@@ -83,7 +83,7 @@ class Amount
         return $this->currency;
     }
 
-    private function getAmountAsMoney(): ?float
+    public function getAmountAsMoney(): ?float
     {
         return $this->getAmount() === null ? null : $this->getAmount() / 100;
     }
