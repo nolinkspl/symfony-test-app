@@ -61,7 +61,7 @@ class Conversion
         return $this->id;
     }
 
-    public function getIsExecuted(): ?bool
+    public function isExecuted(): ?bool
     {
         return $this->isExecuted;
     }
@@ -87,7 +87,7 @@ class Conversion
         return $this;
     }
 
-    public function getRate(): ?float
+    public function rate(): ?float
     {
         return $this->rate;
     }
@@ -99,7 +99,7 @@ class Conversion
         return $this;
     }
 
-    public function getExpireAt(): ?\DateTimeInterface
+    public function expireAt(): ?\DateTimeInterface
     {
         return $this->expireAt;
     }
@@ -125,19 +125,19 @@ class Conversion
         return $this;
     }
 
-    public function info(): array
+    public function fromAmount(): Amount
     {
-        return [
-            'fromAmount' => $this->fromAmount->info(),
-            'toAmount'   => $this->toAmount->info(),
-            'rate'       => $this->rate,
-            'expireAt'   => $this->expireAt,
-        ];
+        return $this->fromAmount;
+    }
+
+    public function toAmount(): Amount
+    {
+        return $this->toAmount;
     }
 
     public function execute()
     {
-        $this->toAmount->setAmount(floor($this->fromAmount->getAmount() * $this->getRate()));
+        $this->toAmount->setAmount(floor($this->fromAmount->getAmount() * $this->rate()));
         $this->fromAmount->deactivate();
         $this->toAmount->activate();
         $this->setExpireAt(null);

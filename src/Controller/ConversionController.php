@@ -28,7 +28,13 @@ class ConversionController extends DefaultController
     public function conversion(int $id): JsonResponse
     {
         $conversion = $this->getConversionById($id);
-        return $this->json(array_merge(['isExecuted' => $conversion->getIsExecuted()], $conversion->info()));
+        return $this->json([
+            'isExecuted' => $conversion->isExecuted(),
+            'fromAmount' => $conversion->fromAmount()->info(),
+            'toAmount'   => $conversion->toAmount()->info(),
+            'rate'       => $conversion->rate(),
+            'expireAt'   => $conversion->expireAt(),
+        ]);
     }
 
     public function executeConversion(int $id): JsonResponse
@@ -57,7 +63,12 @@ class ConversionController extends DefaultController
 
         $conversion = $this->conversionManager->prepareConversion($data);
 
-        return $this->json($conversion->info());
+        return $this->json([
+            'fromAmount'   => $conversion->fromAmount()->info(),
+            'resultAmount' => $conversion->toAmount()->info(),
+            'rate'         => $conversion->rate(),
+            'expireAt'     => $conversion->expireAt(),
+        ]);
     }
 
     private function getConversionById(int $id): Conversion
