@@ -44,20 +44,20 @@ class Currency
         return $this;
     }
 
-    public function getRates(): ?string
+    public function getRates(): array
     {
-        return $this->rates;
+        $result = json_decode($this->rates, true);
+        if (count($result) > 0) {
+            return $result;
+        }
+
+        return [];
     }
 
-    public function setRates(?string $rates): self
+    public function setRates(array $rates): self
     {
-        $this->rates = $rates;
+        $this->rates = json_encode($rates);
 
         return $this;
-    }
-
-    public function getEncodedRates(): array
-    {
-        return json_encode($this->getRates(), true);
     }
 }
