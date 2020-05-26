@@ -28,6 +28,11 @@ class Amount
     private $amount;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive = false;
+
+    /**
      * @var Currency
      * @ORM\ManyToOne(targetEntity="Currency")
      * @ORM\JoinColumn(name="currency_id", referencedColumnName="id")
@@ -54,6 +59,25 @@ class Amount
     public function setCurrency(Currency $currency)
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function activate()
+    {
+        $this->isActive = true;
+
+        return $this;
+    }
+
+    public function deactivate()
+    {
+        $this->isActive = false;
 
         return $this;
     }

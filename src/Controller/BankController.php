@@ -18,7 +18,7 @@ class BankController extends DefaultController
 
     public function bank(): JsonResponse
     {
-        $amounts = $this->amountRepository->findAll();
+        $amounts = $this->amountRepository->findBy(['isActive' => true]);
 
         $result = [];
         foreach ($amounts as $amount) {

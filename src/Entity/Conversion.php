@@ -138,6 +138,8 @@ class Conversion
     public function execute()
     {
         $this->toAmount->setAmount(floor($this->fromAmount->getAmount() * $this->getRate()));
+        $this->fromAmount->deactivate();
+        $this->toAmount->activate();
         $this->setExpireAt(null);
         $this->isExecuted = true;
     }

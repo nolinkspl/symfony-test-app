@@ -72,7 +72,7 @@ class ConversionManager
         $fromCurrencyCode = $this->propertyAccessor->getValue($data, '[fromAmount][currency]');
         var_dump($fromCurrencyCode);
         $fromCurrency = $this->currencyRepository->findOneBy(['code' => $fromCurrencyCode]);
-        $toCurrencyCode = $this->propertyAccessor->getValue($data, '[resultAmount][currency]');
+        $toCurrencyCode = $this->propertyAccessor->getValue($data, '[toCurrency][currency]');
         var_dump($toCurrencyCode);
         $toCurrency = $this->currencyRepository->findOneBy(['code' => $toCurrencyCode]);
 
@@ -80,7 +80,7 @@ class ConversionManager
             throw new HttpException(406, 'Invalid currency pair');
         }
 
-        $fromAmount = (new Amount())->setAmount(125125)->setCurrency($fromCurrency);
+        $fromAmount = (new Amount())->setAmount(125125)->setCurrency($fromCurrency)->activate();
         $result = $this->createConversion($fromAmount, $fromCurrency, $toCurrency);
 
         $this->storeConversion($result);
