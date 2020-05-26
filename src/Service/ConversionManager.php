@@ -70,8 +70,10 @@ class ConversionManager
     public function prepareConversion(array $data): Conversion
     {
         $fromCurrencyCode = $this->propertyAccessor->getValue($data, '[fromAmount][currency]');
+        var_dump($fromCurrencyCode);
         $fromCurrency = $this->currencyRepository->findOneBy(['code' => $fromCurrencyCode]);
         $toCurrencyCode = $this->propertyAccessor->getValue($data, '[resultAmount][currency]');
+        var_dump($toCurrencyCode);
         $toCurrency = $this->currencyRepository->findOneBy(['code' => $toCurrencyCode]);
 
         if (empty($fromCurrency) || empty($toCurrency)) {
