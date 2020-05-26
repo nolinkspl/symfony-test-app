@@ -113,7 +113,10 @@ class ConversionManager
         }
 
         $result->setRate($rate);
-        $result->setToAmount((new Amount())->setCurrency($toCurrency)->setAmount());
+        $result->setToAmount((new Amount())
+            ->setCurrency($toCurrency)
+            ->setAmount($result->fromAmount()->getAmount() * $result->rate())
+        );
 
         return $result;
     }
