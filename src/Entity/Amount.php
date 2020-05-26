@@ -23,7 +23,7 @@ class Amount
     private $currency_id;
 
     /**
-     * @ORM\Column(type="bigint", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $amount;
 
@@ -82,12 +82,12 @@ class Amount
         return $this;
     }
 
-    public function getAmount(): ?int
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
 
-    public function setAmount(int $amount): self
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
 
@@ -98,17 +98,12 @@ class Amount
     {
         return [
             'currency' => $this->currency->getCode(),
-            'amount'   => $this->getAmountAsMoney(),
+            'amount'   => $this->getAmount(),
         ];
     }
 
     public function currency(): Currency
     {
         return $this->currency;
-    }
-
-    public function getAmountAsMoney(): ?float
-    {
-        return $this->getAmount() === null ? null : $this->getAmount() / 100;
     }
 }

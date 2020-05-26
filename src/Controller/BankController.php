@@ -24,7 +24,7 @@ class BankController extends DefaultController
         foreach ($amounts as $amount) {
             $result[] = [
                 'currency' => $amount->currency()->getCode(),
-                'amount'   => $amount->getAmountAsMoney(),
+                'amount'   => $amount->getAmount(),
             ];
         }
 

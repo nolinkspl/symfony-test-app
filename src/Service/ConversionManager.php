@@ -69,7 +69,7 @@ class ConversionManager
 
     public function prepareConversion(array $data): Conversion
     {
-        $fromCurrencyCode = $this->propertyAccessor->getValue($data, '[fromAmount][currency]');
+        $fromCurrencyCode = $fromCurrencyCode = $this->propertyAccessor->getValue($data, '[fromAmount][currency]');
         var_dump($fromCurrencyCode);
         $fromCurrency = $this->currencyRepository->findOneBy(['code' => $fromCurrencyCode]);
         $toCurrencyCode = $this->propertyAccessor->getValue($data, '[toCurrency]');
@@ -80,7 +80,11 @@ class ConversionManager
             throw new HttpException(406, 'Invalid currency pair');
         }
 
-        $fromAmount = (new Amount())->setAmount(125125)->setCurrency($fromCurrency)->activate();
+        $fromAmount = (new Amount())
+            ->setAmount($this->propertyAccessor->getValue($data, '[fromAmount][amount]'))
+            ->setCurrency($fromCurrency)
+            ->activate();
+
         $result = $this->createConversion($fromAmount, $fromCurrency, $toCurrency);
 
         $this->storeConversion($result);
@@ -94,7 +98,7 @@ class ConversionManager
         $this->storeConversion($conversion);
     }
 
-    public function createConversion(
+    private function createConversion(
         Amount $amount,
         Currency $fromCurrency,
         Currency $toCurrency
@@ -103,8 +107,7 @@ class ConversionManager
         $result = new Conversion();
         $result->setExpireAt(new \DateTime('+1 minute'));
         $result->setFromAmount($amount);
-        $result->setToAmount((new Amount())->setCurrency($toCurrency));
-var_dump($fromCurrency->getRates());
+
         $rate = $this->propertyAccessor->getValue($fromCurrency->getRates(), "[{$toCurrency->getCode()}]");
 
         if (empty($rate)) {
@@ -112,6 +115,7 @@ var_dump($fromCurrency->getRates());
         }
 
         $result->setRate($rate);
+        $result->setToAmount((new Amount())->setCurrency($toCurrency)->setAmount());
 
         return $result;
     }
