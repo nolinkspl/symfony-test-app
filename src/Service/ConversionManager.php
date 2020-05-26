@@ -105,7 +105,7 @@ class ConversionManager
         $result->setFromAmount($amount);
         $result->setToAmount((new Amount())->setCurrency($toCurrency));
 var_dump($fromCurrency->getRates());
-        $rate = $this->propertyAccessor->getValue($fromCurrency->getRates(), $toCurrency->getCode());
+        $rate = $this->propertyAccessor->getValue($fromCurrency->getRates(), "[{$toCurrency->getCode()}]");
 
         if (empty($rate)) {
             throw new HttpException(406, 'Rate doesnt exists');
