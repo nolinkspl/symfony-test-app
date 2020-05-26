@@ -69,9 +69,9 @@ class ConversionManager
 
     public function prepareConversion(array $data): Conversion
     {
-        $fromCurrencyCode = $this->propertyAccessor->getValue($data, 'fromAmount.currency');
+        $fromCurrencyCode = $this->propertyAccessor->getValue($data, '[fromAmount][currency]');
         $fromCurrency = $this->currencyRepository->findOneBy(['code' => $fromCurrencyCode]);
-        $toCurrencyCode = $this->propertyAccessor->getValue($data, 'resultAmount.currency');
+        $toCurrencyCode = $this->propertyAccessor->getValue($data, '[resultAmount][currency]');
         $toCurrency = $this->currencyRepository->findOneBy(['code' => $toCurrencyCode]);
 
         if (empty($fromCurrency) || empty($toCurrency)) {
