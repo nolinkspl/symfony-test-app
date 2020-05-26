@@ -104,7 +104,7 @@ class ConversionManager
         $result->setExpireAt(new \DateTime('+1 minute'));
         $result->setFromAmount($amount);
         $result->setToAmount((new Amount())->setCurrency($toCurrency));
-
+var_dump($fromCurrency->getRates());
         $rate = $this->propertyAccessor->getValue($fromCurrency->getRates(), $toCurrency->getCode());
 
         if (empty($rate)) {
