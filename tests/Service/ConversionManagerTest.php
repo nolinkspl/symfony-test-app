@@ -17,6 +17,6 @@ class ConversionManagerTest extends TestCase
      */
     public function testFindConversionById()
     {
-        $result =
+
     }
 }
