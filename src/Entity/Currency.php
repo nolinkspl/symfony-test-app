@@ -47,7 +47,7 @@ class Currency
     public function getRates(): array
     {
         $result = json_decode($this->rates, true);
-        if (count($result) > 0) {
+        if (is_array($result)) {
             return $result;
         }
 
