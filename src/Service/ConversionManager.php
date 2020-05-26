@@ -72,7 +72,7 @@ class ConversionManager
         $fromCurrencyCode = $this->propertyAccessor->getValue($data, '[fromAmount][currency]');
         var_dump($fromCurrencyCode);
         $fromCurrency = $this->currencyRepository->findOneBy(['code' => $fromCurrencyCode]);
-        $toCurrencyCode = $this->propertyAccessor->getValue($data, '[toCurrency][currency]');
+        $toCurrencyCode = $this->propertyAccessor->getValue($data, '[toCurrency]');
         var_dump($toCurrencyCode);
         $toCurrency = $this->currencyRepository->findOneBy(['code' => $toCurrencyCode]);
 
