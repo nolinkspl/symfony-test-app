@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ConversionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass=ConversionRepository::class)
@@ -142,5 +143,12 @@ class Conversion
         $this->toAmount->activate();
         $this->setExpireAt(null);
         $this->isExecuted = true;
+    }
+
+    public function setDefaultExpireAt(): self
+    {
+        $this->setExpireAt(new \DateTime('+1 minute'));
+
+        return $this;
     }
 }

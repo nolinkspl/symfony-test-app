@@ -103,7 +103,7 @@ class ConversionManager
     ): Conversion
     {
         $result = new Conversion();
-        $result->setExpireAt(new \DateTime('+1 minute'));
+        $result->setDefaultExpireAt();
         $result->setFromAmount($amount);
 
         $rate = $this->propertyAccessor->getValue($fromCurrency->getRates(), "[{$toCurrency->getCode()}]");
